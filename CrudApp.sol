@@ -48,14 +48,24 @@ constract CrudApp {
             if (compareStrings(countries[i].name, countryName)) {
                 countries[i] = countries[totalCountries - 1]; // pushing last into current arrray index which we gonna delete
                 delete countries[totalCountries - 1]; // now deleteing last index
-                totalCountries--; //total count decrease
+                totalCountries--; // total count decrease
                 countries.length--; // array length decrease
-                
+
                 // Emit event
                 emit CountryDelete(countryName);
                 return true;
             }
         }
         return false;
+    }
+
+    function getCountry(string countryName) public view returns(string name, string leader, uint256 population) {
+        for (uint256 i = 0; i < totalCountries; i++) {
+            if (compareStrings(countries[i].name, countryName)) {
+                // Emit event
+                return (countries[i].name, countries[i].leader, countries[i].population);
+            }
+        }
+        revert('country not found');
     }
 }

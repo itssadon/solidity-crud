@@ -1,6 +1,6 @@
-pragma solidity ^ 0.4 .23;
+pragma solidity >=0.4.23;
 
-constract CrudApp {
+contract CrudApp {
 
     struct country {
         string name;
@@ -17,20 +17,20 @@ constract CrudApp {
     }
 
     event CountryEvent(string countryName, string leader, uint256 population);
-    event LeaderUpdate(string countryName, string leader);
+    event LeaderUpdated(string countryName, string leader);
     event CountryDelete(string countryName);
 
-    function insert(string countryName, string leader, uint256 population) public returns(uint256 totalCountries) {
+    function insert(string memory countryName, string memory leader, uint256 population) public returns(uint256 numOfCountries) {
         country memory newCountry = country(countryName, leader, population);
         countries.push(newCountry);
-        totalCountries++;
+        numOfCountries++;
 
         // Emit event
         emit CountryEvent(countryName, leader, population);
-        return totalCountries;
+        return numOfCountries;
     }
 
-    function updateLeader(string countryName, string newLeader) public returns(bool success) {
+    function updateLeader(string memory countryName, string memory newLeader) public returns(bool success) {
         // This has a problem we need loop
         for (uint256 i = 0; i < totalCountries; i++) {
             if (compareStrings(countries[i].name, countryName)) {
@@ -42,14 +42,14 @@ constract CrudApp {
         return false;
     }
 
-    function deleteCountry(string countryName) public returns(bool success) {
+    function deleteCountry(string memory countryName) public returns(bool success) {
         require(totalCountries > 0);
         for (uint256 i = 0; i < totalCountries; i++) {
             if (compareStrings(countries[i].name, countryName)) {
                 countries[i] = countries[totalCountries - 1]; // pushing last into current arrray index which we gonna delete
                 delete countries[totalCountries - 1]; // now deleteing last index
                 totalCountries--; // total count decrease
-                countries.length--; // array length decrease
+                countries.pop(); // array length decrease
 
                 // Emit event
                 emit CountryDelete(countryName);
@@ -59,7 +59,7 @@ constract CrudApp {
         return false;
     }
 
-    function getCountry(string countryName) public view returns(string name, string leader, uint256 population) {
+    function getCountry(string memory countryName) public view returns(string memory name, string memory leader, uint256 population) {
         for (uint256 i = 0; i < totalCountries; i++) {
             if (compareStrings(countries[i].name, countryName)) {
                 // Emit event
@@ -69,8 +69,8 @@ constract CrudApp {
         revert('country not found');
     }
 
-    function compareStrings(string a, string b) internal pure returns(bool) {
-        return keccak256(a) == keccak256(b);
+    function compareStrings(string memory a, string memory b) internal pure returns(bool) {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
     function getTotalCountries() public view returns(uint256 length) {

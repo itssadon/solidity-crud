@@ -15,4 +15,8 @@ constract CrudApp {
     constructor() public {
         totalCountries = 0;
     }
+
+    event CountryEvent(string countryName, string leader, uint256 population);
+    event LeaderUpdate(string countryName, string leader);
+    event CountryDelete(string countryName);
 }

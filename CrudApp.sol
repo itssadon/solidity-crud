@@ -19,4 +19,13 @@ constract CrudApp {
     event CountryEvent(string countryName, string leader, uint256 population);
     event LeaderUpdate(string countryName, string leader);
     event CountryDelete(string countryName);
+
+    function insert(string countryName, string leader, uint256 population) public returns (uint256 totalCountries) {
+        country memory newCountry = country(countryName, leader, population);
+        countries.push(newCountry);
+        totalCountries++;
+
+        emit CountryEvent(countryName, leader, population);
+        return totalCountries;
+    }
 }

@@ -68,4 +68,8 @@ constract CrudApp {
         }
         revert('country not found');
     }
+
+    function compareStrings(string a, string b) internal pure returns(bool) {
+        return keccak256(a) == keccak256(b);
+    }
 }

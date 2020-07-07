@@ -72,4 +72,8 @@ constract CrudApp {
     function compareStrings(string a, string b) internal pure returns(bool) {
         return keccak256(a) == keccak256(b);
     }
+
+    function getTotalCountries() public view returns(uint256 length) {
+        return countries.length;
+    }
 }

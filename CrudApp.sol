@@ -41,4 +41,21 @@ constract CrudApp {
         }
         return false;
     }
+
+    function deleteCountry(string countryName) public returns(bool success) {
+        require(totalCountries > 0);
+        for (uint256 i = 0; i < totalCountries; i++) {
+            if (compareStrings(countries[i].name, countryName)) {
+                countries[i] = countries[totalCountries - 1]; // pushing last into current arrray index which we gonna delete
+                delete countries[totalCountries - 1]; // now deleteing last index
+                totalCountries--; //total count decrease
+                countries.length--; // array length decrease
+                
+                // Emit event
+                emit CountryDelete(countryName);
+                return true;
+            }
+        }
+        return false;
+    }
 }
